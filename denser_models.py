@@ -1,3 +1,4 @@
+import sys
 import getopt
 import keras
 from keras import backend
@@ -89,3 +90,28 @@ AUGMENT_TEST = 100
 CIFAR_10_DIR = './CIFAR-10/'
 CIFAR_100_DIR = './CIFAR-100/'
 TRAIN_FILENAME = 'train_%d.hdf5'
+
+if __name__ == '__main__':
+    options, remainder = getopt.getopt(sys.argv[1:], 'd:m', ['dataset=',
+                                                             'multiple',
+                                                            ])
+
+    dataset = None
+    multiple = True
+    
+    for opt, arg in options:
+        if opt in ('-d', '--dataset'):
+            if arg is 'cifar-10':
+                dataset = 10
+            elif arg is 'cifar-100':
+                dataset = 100
+
+        if opt in ('-m', '--multiple'):
+            one_model = False
+
+    if dataset is None:
+        print 'Invalid dataset!'
+
+    else:
+        test(dataset, multiple)
+
