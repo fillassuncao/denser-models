@@ -52,16 +52,18 @@ def load_cifar(n_classes=100, test_size=7500):
 
     return dataset
 
-def test(dataset=10, one_model=True):
+def test(n_classes=10, one_model=True):
     
     models = []
     predictions = []
 
-    if dataset == 10:
+    dataset = load_cifar(n_classes)
+
+    if nclasses == 10:
         for train_idx in xrange(NUM_TRAINS):
             models.append(load_model("%s/%s" % (CIFAR_10_DIR, TRAIN_FILENAME % train_idx), custom_objects={"backend": backend}))
 
-    elif dataset == 100:
+    elif nclasses == 100:
         if one_model:
             for train_idx in xrange(NUM_TRAINS):
                 models.append(load_model("%s/net_1/%s" % (CIFAR_10_DIR, TRAIN_FILENAME % train_idx), custom_objects={"backend": backend}))
@@ -105,7 +107,7 @@ if __name__ == '__main__':
             if arg == 'cifar-10':
                 print arg
                 dataset = 10
-            elif arg is 'cifar-100':
+            elif arg == 'cifar-100':
                 dataset = 100
 
         if opt in ('-m', '--multiple'):
