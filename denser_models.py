@@ -69,7 +69,7 @@ def test(n_classes=10, one_model=True):
     elif n_classes == 100:
         if one_model:
             for train_idx in xrange(NUM_TRAINS):
-                models.append(load_model("%s/net_1/%s" % (CIFAR_10_DIR, TRAIN_FILENAME % train_idx), custom_objects={"backend": backend}))
+                models.append(load_model("%s/net_1/%s" % (CIFAR_100_DIR, TRAIN_FILENAME % train_idx), custom_objects={"backend": backend}))
         else:
             for train_idx in xrange(NUM_TRAINS*2):
                 if train_idx < 5:
