@@ -24,7 +24,7 @@ Currently this codebase only works with python 2. The following libraries are ne
 
 ### Instalation
 
-``python denser_models -d [dataset] -m`
+`python denser_models -d [dataset] -m`
 
 -d can assume two possible values: cifar-10 and cifar-100
 
