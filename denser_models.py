@@ -30,7 +30,10 @@ def augmentation(x):
 
 
 def load_cifar(n_classes=100, test_size=7500):
-    (x_train, y_train), (x_test, y_test) = keras.datasets.cifar100.load_data()
+    if n_classes == 10:
+        (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
+    elif n_classes == 100:
+        (x_train, y_train), (x_test, y_test) = keras.datasets.cifar100.load_data()
 
     x_train = x_train.astype('float32')
     x_test = x_test.astype('float32')
@@ -103,9 +106,7 @@ if __name__ == '__main__':
     
     for opt, arg in options:
         if opt in ('-d', '--dataset'):
-            print arg
             if arg == 'cifar-10':
-                print arg
                 dataset = 10
             elif arg == 'cifar-100':
                 dataset = 100
