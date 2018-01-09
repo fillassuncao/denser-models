@@ -102,7 +102,7 @@ if __name__ == '__main__':
     for opt, arg in options:
         if opt in ('-d', '--dataset'):
             print arg
-            if arg is 'cifar-10':
+            if arg == 'cifar-10':
                 print arg
                 dataset = 10
             elif arg is 'cifar-100':
