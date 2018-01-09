@@ -27,6 +27,7 @@ Currently this codebase only works with python 2. The following libraries are ne
 ``python denser_models -d [dataset] -m`
 
 -d can assume two possible values: cifar-10 and cifar-100
+
 -m is an option with the cifar-100 dataset that forms the classifier as an ensemble of the two best models 
 
 ### Support
