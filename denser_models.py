@@ -5,15 +5,8 @@ from keras import backend
 from keras.models import load_model
 import numpy as np
 from sklearn.metrics import accuracy_score
-
-import sys
-import getopt
-import keras
-from keras import backend
-from keras.models import load_model
-import numpy as np
-from sklearn.metrics import accuracy_score
 import fashion_mnist
+from load_data import load_mnist_rotated, load_mnist_background, load_svhn, load_rectangles, load_rectangles_images, load_mnist_rotated_background
 
 def augmentation(x):
     pad_size = 4
@@ -38,7 +31,9 @@ def augmentation(x):
     return aug_data
 
 
-def load_cifar():
+def load_data():
+    SCALE = 255.0
+
     if DATASET == 'cifar-10':
         (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
     elif DATASET == 'cifar-100':
@@ -51,11 +46,41 @@ def load_cifar():
         (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
         x_train = np.reshape(x_train, (-1, 28, 28, 1))
         x_test = np.reshape(x_test, (-1, 28, 28, 1))
+    elif DATASET == 'mnist-rotated':
+        x_train, y_train, x_test, y_test = load_mnist_rotated()
+        x_train = np.reshape(x_train, (-1, 28, 28, 1))
+        x_test = np.reshape(x_test, (-1, 28, 28, 1))
+        SCALE = 1.0
+    elif DATASET == 'mnist-background':
+        x_train, y_train, x_test, y_test = load_mnist_background()
+        x_train = np.reshape(x_train, (-1, 28, 28, 1), order='F')
+        x_test = np.reshape(x_test, (-1, 28, 28, 1), order='F')
+        SCALE = 1.0
+    elif DATASET == 'mnist-rotated-background':
+        x_train, y_train, x_test, y_test =load_mnist_rotated_background()
+        x_train = np.reshape(x_train, (-1, 28, 28, 1), order='F')
+        x_test = np.reshape(x_test, (-1, 28, 28, 1), order='F')
+        SCALE = 1.0
+    elif DATASET == 'svhn':
+        x_train, y_train, x_test, y_test = load_svhn()
+        x_train = np.reshape(x_train, (-1, 32, 32, 3))
+        x_test = np.reshape(x_test, (-1, 32, 32, 3))
+        SCALE = 1.0
+    elif DATASET == 'rectangles':
+        x_train, y_train, x_test, y_test = load_rectangles()
+        x_train = np.reshape(x_train, (-1, 28, 28, 1))
+        x_test = np.reshape(x_test, (-1, 28, 28, 1))
+        SCALE = 1.0
+    elif DATASET == 'rectangles-background':   
+        x_train, y_train, x_test, y_test = load_rectangles_images()
+        x_train = np.reshape(x_train, (-1, 28, 28, 1))
+        x_test = np.reshape(x_test, (-1, 28, 28, 1))
+        SCALE = 1.0
 
     x_train = x_train.astype('float32')
     x_test = x_test.astype('float32')
-    x_train /= 255.0
-    x_test /= 255.0
+    x_train /= SCALE
+    x_test /= SCALE
 
     x_mean = 0
     for x in x_train:
@@ -77,7 +102,7 @@ def test(one_model=True):
     models = []
     predictions = []
 
-    dataset = load_cifar()
+    dataset = load_data()
 
     if one_model:
         for train_idx in xrange(NUM_TRAINS):
@@ -98,7 +123,7 @@ def test(one_model=True):
         print 'predicting...'
         for _ in range(AUGMENT_TEST):
             x_test_augmented = np.array([augmentation(image) for image in dataset['x_test']])
-            predictions.append(model.predict(x_test_augmented, batch_size=125, verbose=2))
+            predictions.append(model.predict(x_test_augmented, batch_size=BATCH_SIZE, verbose=2))
 
     avg_prediction = np.average(predictions, axis=0)
     y_pred = np.argmax(avg_prediction, axis=1)
@@ -119,6 +144,7 @@ if __name__ == '__main__':
 
     multiple = True
     DATASET = None
+    BATCH_SIZE = 125
     
     for opt, arg in options:
         if opt in ('-d', '--dataset'):
@@ -137,8 +163,29 @@ if __name__ == '__main__':
                 HEIGHT = 32
                 NUM_CHANNELS = 3
             elif arg == 'mnist':
-                TRAIN_DIR = './MNIST/'
+                TRAIN_DIR = './MNIST/Standard/'
                 DATASET = 'mnist'
+                NUM_CLASSES = 10
+                WIDTH = 28
+                HEIGHT = 28
+                NUM_CHANNELS = 1
+            elif arg == 'mnist-rotated':
+                TRAIN_DIR = './MNIST/Rotated/'
+                DATASET = 'mnist-rotated'
+                NUM_CLASSES = 10
+                WIDTH = 28
+                HEIGHT = 28
+                NUM_CHANNELS = 1
+            elif arg == 'mnist-background':
+                TRAIN_DIR = './MNIST/Background/'
+                DATASET = 'mnist-background'
+                NUM_CLASSES = 10
+                WIDTH = 28
+                HEIGHT = 28
+                NUM_CHANNELS = 1
+            elif arg == 'mnist-rotated-background':
+                TRAIN_DIR = './MNIST/Rotated+Background/'
+                DATASET = 'mnist-rotated-background'
                 NUM_CLASSES = 10
                 WIDTH = 28
                 HEIGHT = 28
@@ -150,6 +197,22 @@ if __name__ == '__main__':
                 WIDTH = 28
                 HEIGHT = 28
                 NUM_CHANNELS = 1
+            elif arg == 'rectangles':
+                TRAIN_DIR = './Rectangles/Standard/'
+                DATASET = 'rectangles'
+                NUM_CLASSES = 2
+                WIDTH = 28
+                HEIGHT = 28
+                NUM_CHANNELS = 1
+                BATCH_SIZE = 100
+            elif arg == 'rectangles-background':
+                TRAIN_DIR = './Rectangles/Background/'
+                DATASET = 'rectangles-background'
+                NUM_CLASSES = 2
+                WIDTH = 28
+                HEIGHT = 28
+                NUM_CHANNELS = 1
+                BATCH_SIZE = 100
 
         if opt in ('-m', '--multiple'):
             multiple = False

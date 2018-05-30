@@ -26,9 +26,9 @@ Currently this codebase only works with python 2. The following libraries are ne
 
 `python denser_models -d [dataset] -m`
 
--d can assume one of the following values: cifar-10, cifar-100, mnist, or fashion-mnist
+-d can assume one of the following values: cifar-10, cifar-100, mnist, mnist-rotated, mnist-background, mnist-rotated-background, fashion-mnist, rectangles, or rectangles-background
 
--m is an option with the cifar-100, mnist, or fashion-mnist datasets that forms the classifier as an ensemble of the two best models 
+-m is an option that forms the classifier as an ensemble of the two best models 
 
 ### Support
 

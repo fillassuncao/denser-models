@@ -28,7 +28,6 @@ def load_data():
         path_y_train = urllib.urlretrieve('http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz', 'train-labels-idx1-ubyte.gz')
         path_x_test = urllib.urlretrieve('http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-images-idx3-ubyte.gz', 't10k-images-idx3-ubyte.gz')
         path_y_test = urllib.urlretrieve('http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labels-idx1-ubyte.gz', 't10k-labels-idx1-ubyte.gz')
-    print(path_x_train)
 
     with gzip.open('train-images-idx3-ubyte.gz', 'rb') as f:
         x_train = idx2numpy.convert_from_string(f.read())
