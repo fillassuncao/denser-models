@@ -24,6 +24,8 @@ Currently this codebase only works with python 2. The following libraries are ne
 
 ### Instalation
 
+Unzip the datasets that are zipped
+
 `python denser_models -d [dataset] -m`
 
 -d can assume one of the following values: cifar-10, cifar-100, mnist, mnist-rotated, mnist-background, mnist-rotated-background, fashion-mnist, rectangles, or rectangles-background
